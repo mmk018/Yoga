@@ -99,7 +99,7 @@ console.log(double(10)); */
 
 // Ukazanie konkretnogo konteksta- call, apply i bind
 
-let btn = document.querySelector('button');
+/* let btn = document.querySelector('button');
 
 btn.addEventListener('click', function() {
     console.log(this);
@@ -110,4 +110,19 @@ btn.addEventListener('click', function() {
     }
     showThis();
     
-});
+}); */
+
+let options = {
+    width:  1366,
+    height: 768,
+    background: "red",
+    font : {
+        size: '16px',
+        color: '#fff'
+    }
+
+};
+
+console.log(JSON.parse(JSON.stringify(options)));
+
+

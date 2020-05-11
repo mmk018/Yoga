@@ -129,6 +129,22 @@
             
         });
 
+    //Form 
+        let message = {
+            loading : 'Загрузка...',
+            success : 'Спасибо, мы скоро с вами свяжемся',
+            failure : 'Что то пошло не так',
+
+        };
+
+        let form = document.querySelector('.main-form'),
+            input = form.getElementsByTagName('input'),
+            statusMessage = document.createElement('div');
+            statusMessage.classList.add('status');
+        form.addEventListener('submit', function (event) {
+                event.preventDefault();
+        }) ; 
+
 
     
     
