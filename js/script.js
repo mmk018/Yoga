@@ -141,9 +141,78 @@
             input = form.getElementsByTagName('input'),
             statusMessage = document.createElement('div');
             statusMessage.classList.add('status');
-        form.addEventListener('submit', function (event) {
+            form.addEventListener('submit', function (event) {
                 event.preventDefault();
+                form.appendChild(statusMessage);
+
+                let request = new XMLHttpRequest();
+                request.open('POST', 'server.php');
+                request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+                let formData = new FormData(form);//vse iz formi v dati
+                let obj = {};
+                formData.forEach(function(value, key) {
+                    obj[key] = value;
+                });
+                let json = JSON.stringify(obj);
+
+                //dlja konvertatsii v JSOn, nam nuzen promezutotsnij object
+
+                request.send(json);//poskoljku eto post, to u nego estj body
+                request.addEventListener('readystatechange', function () {
+                    if(request.readyState < 4) {
+                        statusMessage.innerHTML = message.loading;
+
+                    } else if (request.readyState === 4 && request.status == 200) {
+                        statusMessage.innerHTML = message.success;
+                    } else {
+                        statusMessage.innerHTML = message.failure;
+                    }
+                })
+            for (let i = 0; i < input.length; i++) {
+                input[i].value = '';// obnulim input
+            }    
+
         }) ; 
+
+        //Form Contact
+        let formContact = document.querySelector('#form'),
+        inputContact = formContact.getElementsByTagName('input');
+        statusMessage = document.createElement('div');
+        statusMessage.classList.add('status');
+        formContact.addEventListener('submit', function (event) {
+            event.preventDefault();
+            form.appendChild(statusMessage);
+
+            let request = new XMLHttpRequest();
+            request.open('POST', 'server.php');
+            request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+            let formData = new FormData(form);//vse iz formi v dati
+            let obj = {};
+            formData.forEach(function(value, key) {
+                obj[key] = value;
+            });
+            let json = JSON.stringify(obj);
+
+            //dlja konvertatsii v JSOn, nam nuzen promezutotsnij object
+
+            request.send(json);//poskoljku eto post, to u nego estj body
+            request.addEventListener('readystatechange', function () {
+                if(request.readyState < 4) {
+                    statusMessage.innerHTML = message.loading;
+
+                } else if (request.readyState === 4 && request.status == 200) {
+                    statusMessage.innerHTML = message.success;
+                } else {
+                    statusMessage.innerHTML = message.failure;
+                }
+            })
+        for (let i = 0; i < inputContact.length; i++) {
+            inputContact[i].value = '';// obnulim input
+        }    
+
+    }) ; 
 
 
     
