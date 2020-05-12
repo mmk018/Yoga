@@ -150,11 +150,23 @@
                 request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
                 let formData = new FormData(form);//vse iz formi v dati
+                console.log(formData);
+                
                 let obj = {};
                 formData.forEach(function(value, key) {
                     obj[key] = value;
                 });
+                console.log(formData);
+                
+                console.log(obj);
+                
+                
+                
                 let json = JSON.stringify(obj);
+                console.log(json);
+                
+                
+                
 
                 //dlja konvertatsii v JSOn, nam nuzen promezutotsnij object
 
@@ -182,18 +194,27 @@
         statusMessage.classList.add('status');
         formContact.addEventListener('submit', function (event) {
             event.preventDefault();
-            form.appendChild(statusMessage);
+            formContact.appendChild(statusMessage);
 
             let request = new XMLHttpRequest();
             request.open('POST', 'server.php');
             request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
-            let formData = new FormData(form);//vse iz formi v dati
+            let formData = new FormData(formContact);//vse iz formi v dati
+            console.log(formContact);
+            
+            console.log(formData);
+            
             let obj = {};
             formData.forEach(function(value, key) {
                 obj[key] = value;
             });
+            console.log(obj);
+            
             let json = JSON.stringify(obj);
+
+            console.log(json);
+            
 
             //dlja konvertatsii v JSOn, nam nuzen promezutotsnij object
 
