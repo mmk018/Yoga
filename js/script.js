@@ -141,51 +141,61 @@
             input = form.getElementsByTagName('input'),
             statusMessage = document.createElement('div');
             statusMessage.classList.add('status');
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-                form.appendChild(statusMessage);
-
-                let request = new XMLHttpRequest();
-                request.open('POST', 'server.php');
-                request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-
-                let formData = new FormData(form);//vse iz formi v dati
-                console.log(formData);
-                
-                let obj = {};
-                formData.forEach(function(value, key) {
-                    obj[key] = value;
+            let req = new Promise(function(resolve, reject) {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    form.appendChild(statusMessage);
+            
+                    let request = new XMLHttpRequest();
+                    request.open('POST', 'server.php');
+                    request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+            
+                    let formData = new FormData(form);//vse iz formi v dati
+                    console.log(formData);
+                    
+                    let obj = {};
+                    formData.forEach(function(value, key) {
+                        obj[key] = value;
+                    });
+                    console.log(formData);
+                    
+                    console.log(obj);
+                    
+                    
+                    
+                    let json = JSON.stringify(obj);
+                    console.log(json); 
+                });    
+            
                 });
-                console.log(formData);
+            
+                req.then(() => {
+                    request.send(json);//poskoljku eto post, to u nego estj body
+                    request.addEventListener('readystatechange', function () {
+                        if(request.readyState < 4) {
+                            statusMessage.innerHTML = message.loading;
+            
+                        } else if (request.readyState === 4 && request.status == 200) {
+                            statusMessage.innerHTML = message.success;
+                        } else {
+                            statusMessage.innerHTML = message.failure;
+                        }
+                        for (let i = 0; i < input.length; i++) {
+                            input[i].value = '';// obnulim input//
+                        } 
+                    });
                 
-                console.log(obj);
-                
-                
-                
-                let json = JSON.stringify(obj);
-                console.log(json);
-                
-                
-                
-
-                //dlja konvertatsii v JSOn, nam nuzen promezutotsnij object
-
-                request.send(json);//poskoljku eto post, to u nego estj body
-                request.addEventListener('readystatechange', function () {
-                    if(request.readyState < 4) {
-                        statusMessage.innerHTML = message.loading;
-
-                    } else if (request.readyState === 4 && request.status == 200) {
-                        statusMessage.innerHTML = message.success;
-                    } else {
-                        statusMessage.innerHTML = message.failure;
-                    }
-                })
-            for (let i = 0; i < input.length; i++) {
-                input[i].value = '';// obnulim input
-            }    
-
-        }) ; 
+                });
+            
+                req.catch(() => {
+                    console.log('Reject is happend');
+                    
+                });
+                req.finally(() => {
+                    console.log('Thank You ,that you are with us!');
+                    
+                });
+            
 
         //Form Contact
         let formContact = document.querySelector('#form'),
@@ -241,4 +251,62 @@
 
 /*  });  */
 
+//SLider
 
+let slideIndex = 1,
+    slides = document.querySelectorAll('.slider-item'),
+    prev = document.querySelector('.prev'),
+    next = document.querySelector('.next'),
+    dotsWrap = document.querySelector('.slider-dots'),
+    dots = document.querySelectorAll('.dot');
+
+
+
+
+    showSlides(slideIndex);
+
+
+
+
+
+    function showSlides(n) {
+        if(n > slides.length) {
+            slideIndex = 1;
+        }
+        if (n < 1) {
+            slideIndex = slides.length;
+        }
+
+    slides.forEach(item => item.style.display = 'none');
+    dots.forEach(item => item.classList.remove('dot-active'));
+    slides[slideIndex - 1].style.display = 'block';
+    dots[slideIndex - 1].classList.add('dot-active');
+    }
+
+showSlides(slideIndex);
+
+function plusSlides (n) {
+    showSlides(slideIndex += n);
+
+}
+
+function currentSlide(n) {
+    showSlides(slideIndex = n);
+}
+
+prev.addEventListener('click', function() {
+    plusSlides(-1);
+
+} );
+
+next.addEventListener('click', function() {
+    plusSlides(1);
+});
+
+dotsWrap.addEventListener('click', function (event) {
+    for(let i = 0; i < dots.length + 1; i++) {
+        if(event.target.classList.contains('dot') && event.target == dots[i - 1] ) {
+            currentSlide(i);
+        }
+    }
+});

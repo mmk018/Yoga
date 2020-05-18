@@ -1,3 +1,6 @@
+'use strict';
+
+
 // Counstruktor funktion vsegda s bolsoj bukvi dlja sozdania novih objektov. Funktisja konstruktor, knstruieuet novie objekti
 
 /* function User(name, id){
@@ -125,4 +128,242 @@ let options = {
 
 console.log(JSON.parse(JSON.stringify(options)));
 
+////Promise
+
+let drink = 1;
+
+
+function shoot (arrow, headshot, fail) {
+    console.log('You made a shot');
+
+    setTimeout(function() {
+        Math.random() > .5 ? headshot({}) : fail('You missed');
+    }, 3000)
+    
+}
+
+function win () {
+    console.log('you win');
+    (drink == 1) ? buyBeer() : giveMoney();
+    
+}
+
+function buyBeer () {
+    console.log('The Beer for You is bought');
+    
+}
+
+function giveMoney () {
+    console.log('Cash was paid to You');
+    
+}
+
+function lose () {
+    console.log('You lose');
+    
+}
+
+
+
+shoot({}, function (mark){
+    console.log('You get point');
+    win(mark, buyBeer, giveMoney );
+    
+}, function(miss) {
+    console.error(miss);
+    lose();
+}
+
+
+)
+
+
+///promise variant
+
+let drink = 1;
+
+
+function shoot (arrow, ) {
+    console.log('You made a shot');
+    let promise = new Promise(function(resolve, reject) {
+        setTimeout(function() {
+            Math.random() > .5 ? resolve({}) : reject('You missed');
+        }, 3000)
+    });
+    return promise;
+
+    
+    
+};
+
+function win () {
+    console.log('you win');
+    (drink == 1) ? buyBeer() : giveMoney();
+    
+}
+
+function buyBeer () {
+    console.log('The Beer for You is bought');
+    
+}
+
+function giveMoney () {
+    console.log('Cash was paid to You');
+    
+}
+
+function lose () {
+    console.log('You lose');
+    
+}
+
+
+
+shoot({})
+    .then(mark => console.log('You get point'))
+    .then(win)//then vipolnjaetsa odnja za drugoi , v slutsae pobedi, resolve
+    .catch(lose)// eta funktsija loose, kotoraja optrabotaet v slutsae proigrisa
+
+
+  
+
+
+
+
+////Promise test
+
+
+
+infoDelegation.addEventListener('click', function(event) {
+    console.log(event.target);
+    moreInfo.forEach(function (element) {
+        if (element === event.target) {
+            console.log(element);
+            
+            overlay.style.display = 'block';
+            
+            document.body.style.overflow = 'hidden';
+        }
+        
+    });
+   
+
+    
+});
+
+//Form 
+let message = {
+    loading : 'Загрузка...',
+    success : 'Спасибо, мы скоро с вами свяжемся',
+    failure : 'Что то пошло не так',
+
+};
+
+let form = document.querySelector('.main-form'),
+    input = form.getElementsByTagName('input'),
+    statusMessage = document.createElement('div');
+    statusMessage.classList.add('status');
+    ////////
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        form.appendChild(statusMessage);
+
+        let request = new XMLHttpRequest();
+        request.open('POST', 'server.php');
+        request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+        let formData = new FormData(form);//vse iz formi v dati
+        console.log(formData);
+        
+        let obj = {};
+        formData.forEach(function(value, key) {
+            obj[key] = value;
+        });
+        console.log(formData);
+        
+        console.log(obj);
+        
+        
+        
+        let json = JSON.stringify(obj);
+        console.log(json);
+        
+        //////
+        
+
+        //dlja konvertatsii v JSOn, nam nuzen promezutotsnij object
+
+        request.send(json);//poskoljku eto post, to u nego estj body
+        request.addEventListener('readystatechange', function () {
+            if(request.readyState < 4) {
+                statusMessage.innerHTML = message.loading;
+
+            } else if (request.readyState === 4 && request.status == 200) {
+                statusMessage.innerHTML = message.success;
+            } else {
+                statusMessage.innerHTML = message.failure;
+            }
+        })
+    for (let i = 0; i < input.length; i++) {
+        input[i].value = '';// obnulim input//
+    }    
+
+}) ; 
+
+
+/////
+
+let req = new Promise(function(resolve, reject) {
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        form.appendChild(statusMessage);
+
+        let request = new XMLHttpRequest();
+        request.open('POST', 'server.php');
+        request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+        let formData = new FormData(form);//vse iz formi v dati
+        console.log(formData);
+        
+        let obj = {};
+        formData.forEach(function(value, key) {
+            obj[key] = value;
+        });
+        console.log(formData);
+        
+        console.log(obj);
+        
+        
+        
+        let json = JSON.stringify(obj);
+        console.log(json); 
+    });    
+
+    });
+
+    req.then(() => {
+        request.send(json);//poskoljku eto post, to u nego estj body
+        request.addEventListener('readystatechange', function () {
+            if(request.readyState < 4) {
+                statusMessage.innerHTML = message.loading;
+
+            } else if (request.readyState === 4 && request.status == 200) {
+                statusMessage.innerHTML = message.success;
+            } else {
+                statusMessage.innerHTML = message.failure;
+            }
+        })
+    for (let i = 0; i < input.length; i++) {
+        input[i].value = '';// obnulim input//
+    }  
+    });
+
+    req.catch(() => {
+        console.log('Reject is happend');
+        
+    });
+    req.finally(() => {
+        console.log('Thank You ,that you are with us!');
+        
+    });
 
